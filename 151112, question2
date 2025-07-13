@@ -1,0 +1,81 @@
+class Student:
+    def __init__(self, name, student_id):
+        self.name = name
+        self.student_id = student_id
+        self.assignments = {}
+
+    def add_assignment(self, assignment_name, grade):
+        self.assignments[assignment_name] = grade
+        print(f"Added assignment '{assignment_name}' with grade {grade} for {self.name}")
+
+    def display_grades(self):
+        if not self.assignments:
+            print(f"{self.name} has no assignments.")
+        else:
+            print(f"Grades for {self.name}:")
+            for assignment, grade in self.assignments.items():
+                print(f"- {assignment}: {grade}")
+
+class Instructor:
+    def __init__(self, name, course_name):
+        self.name = name
+        self.course_name = course_name
+        self.students = []
+
+    def add_student(self, student):
+        self.students.append(student)
+        print(f"Student '{student.name}' added to course '{self.course_name}'.")
+
+    def assign_grade(self, student_id, assignment_name, grade):
+        student = next((s for s in self.students if s.student_id == student_id), None)
+        if student:
+            student.add_assignment(assignment_name, grade)
+        else:
+            print(f"No student found with ID {student_id}.")
+
+    def display_all_grades(self):
+        if not self.students:
+            print("No students enrolled yet.")
+            return
+        print(f"\nGrades for course: {self.course_name}")
+        for student in self.students:
+            student.display_grades()
+            print("-" * 30)
+
+
+def course_menu():
+    while True:
+        print("\nCourse Management Menu")
+        print("1. Add a student")
+        print("2. Assign grade to student")
+        print("3. Display all student grades")
+        print("4. Exit")
+
+        choice = input("Enter your choice (1-4): ")
+
+        if choice == '1':
+            name = input("Enter student name: ")
+            student_id = input("Enter student ID: ")
+            new_student = Student(name, student_id)
+            instructor.add_student(new_student)
+
+        elif choice == '2':
+            student_id = input("Enter student ID: ")
+            assignment_name = input("Enter assignment name: ")
+            try:
+                grade = float(input("Enter grade: "))
+                instructor.assign_grade(student_id, assignment_name, grade)
+            except ValueError:
+                print("Invalid input for grade. Please enter a number.")
+
+        elif choice == '3':
+            instructor.display_all_grades()
+
+        elif choice == '4':
+            print("Exiting course management system.")
+            break
+
+        else:
+            print("Invalid choice. Please choose 1-4.")
+
+course_menu()
